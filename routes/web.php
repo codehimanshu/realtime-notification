@@ -1,5 +1,7 @@
 <?php
 
+use App\Events\eventTrigger;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,4 +15,12 @@
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/alertBox', function(){
+	return view('eventListener');
+});
+
+Route::get('/fireEvent', function(){
+	event(new eventTrigger());
 });
