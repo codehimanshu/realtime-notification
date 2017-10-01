@@ -1,0 +1,3 @@
+function markread(){
+	$.get('markasread');
+}
