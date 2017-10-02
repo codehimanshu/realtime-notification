@@ -9,7 +9,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-
+    <script type="text/javascript">
+        window.laravel = {!! json_encode([
+                'csrfToken' => csrf_token(),
+            ]) !!};
+    </script>
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
@@ -46,21 +50,7 @@
                             <li><a href="{{ route('login') }}">Login</a></li>
                             <li><a href="{{ route('register') }}">Register</a></li>
                         @else
-                            <li class="dropdown" id="markasread" onclick="markread()">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    Notifications <span class="badge">{{ count(Auth::user()->unreadNotifications) }}</span>
-                                </a>
-
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>
-                                        @forelse(Auth::user()->unreadNotifications as $not)
-                                            @include('layouts.notification.'.snake_case(class_basename($not->type)))
-                                            @empty
-                                                <a href="#">No Unread Notifications</a>
-                                        @endforelse
-                                    </li>
-                                </ul>
-                            </li>
+                            <notification :userid="{{ Auth::user()->id }}" :unreads="{{Auth::user()->unreadNotifications}}"></notification>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{ Auth::user()->name }} <span class="caret"></span>

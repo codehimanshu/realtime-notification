@@ -7,6 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Carbon\Carbon;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 
 class reply extends Notification
 {
@@ -30,7 +31,7 @@ class reply extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database','broadcast'];
     }
 
     /**
@@ -58,6 +59,20 @@ class reply extends Notification
         return [
             'messageTime' => Carbon::now()
         ];
+    }
+
+    /**
+     * Get the broadcast representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
+    public function toBroadcast($notifiable)
+    {
+        return new BroadcastMessage([
+            'messageTime' => Carbon::now(),
+            'user'=>auth()->user()
+        ]);
     }
 
     /**
